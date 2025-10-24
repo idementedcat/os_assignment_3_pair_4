@@ -1,12 +1,20 @@
 CC = gcc
-CFLAGS = -Wall -Wpointer-arith -Wstrict-prototypes -std=gnu89 -fPIC -MMD -MP -lpthread
+CFLAGS = -Wall -Wpointer-arith -Wstrict-prototypes -std=gnu89 -fPIC -MMD -MP -g
+LDFLAGS = -lpthread
 
 all: test-mergesort
 
-#This builds an executable 
 test-mergesort: test-mergesort.o mergesort.o
-	$(CC) $(CFLAGS) -o $@ $?
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
+# small test executable that calls test_merge()
+test-merge: mergesort.o test-merge.o
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
+# generic rule for compiling .c -> .o
+%.o: %.c
+	$(CC) $(CFLAGS) -c -o $@ $<
 
 .PHONY: clean
 clean:
-	/bin/rm -f *.o *.d test-mergesort
+	/bin/rm -f *.o *.d test-mergesort test-merge
