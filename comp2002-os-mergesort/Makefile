@@ -11,10 +11,14 @@ test-mergesort: test-mergesort.o mergesort.o
 test-merge: mergesort.o test-merge.o
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
+# test for the sequential my_mergesort implementation
+test-my-mergesort: mergesort.o test-my-mergesort.o
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
 # generic rule for compiling .c -> .o
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 .PHONY: clean
 clean:
-	/bin/rm -f *.o *.d test-mergesort test-merge
+	/bin/rm -f *.o *.d test-mergesort test-merge test-my-mergesort

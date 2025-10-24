@@ -1,67 +1,48 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #include "mergesort.h"
 
-/* define globals expected by mergesort.c */
+/* globals used by mergesort.c */
 int *A;
 int *B;
 
-#define RANGE 1000000
-
-static int cmp_int(const void *a, const void *b) {
-    int ia = *(const int*)a;
-    int ib = *(const int*)b;
-    return (ia > ib) - (ia < ib);
-}
-
-/* refined test: build a random array, sort each half, then call merge */
-void test_merge(void) {
-    int n = 100;
+int main(void) {
+    int n = 10; /* small demo size: two halves of 5 elements each */
     int i;
-    unsigned int seed = (unsigned int)time(NULL);
 
-    A = (int*)malloc(n * sizeof(int));
-    B = (int*)malloc(n * sizeof(int));
-    if (A == NULL || B == NULL) {
-        fprintf(stderr, "malloc failed in test_merge\n");
-        exit(EXIT_FAILURE);
+    A = (int*)malloc(sizeof(int) * n);
+    B = (int*)malloc(sizeof(int) * n);
+    if (!A || !B) {
+        fprintf(stderr, "malloc failed\n");
+        return 1;
     }
 
-    /* generate random array like test-mergesort.c */
-    srandom((unsigned int)seed);
-    for (i = 0; i < n; i++) {
-        A[i] = (int)(random() % RANGE);
-    }
+    /* first sorted half: 1, 3, 5, 7, 9 */
+    A[0] = 1; A[1] = 3; A[2] = 5; A[3] = 7; A[4] = 9;
+    /* second sorted half: 2, 4, 6, 8, 10 */
+    A[5] = 2; A[6] = 4; A[7] = 6; A[8] = 8; A[9] = 10;
 
-    /* sort each half so merge() has two sorted runs to merge */
-    qsort(A, n/2, sizeof(int), cmp_int);
-    qsort(A + n/2, n - n/2, sizeof(int), cmp_int);
+    printf("Before merge:\n");
+    for (i = 0; i < n; i++) printf("%d%c", A[i], (i == n-1) ? '\n' : ' ');
 
-    printf("Seed: %u\n", seed);
-    printf("Array A (before merge; two sorted halves):");
-    for (i = 0; i < n; i++) printf(" %d", A[i]);
-    printf("\n");
+    /* merge the two sorted halves */
+    merge(0, 4, 5, 9);
 
-    merge(0, n/2 - 1, n/2, n - 1);
+    printf("After merge:\n");
+    for (i = 0; i < n; i++) printf("%d%c", A[i], (i == n-1) ? '\n' : ' ');
 
-    printf("Array A (after merge):");
-    for (i = 0; i < n; i++) printf(" %d", A[i]);
-    printf("\n");
-
-    {
-        int sorted = 1;
-        for (i = 0; i < n - 1; i++) {
-            if (A[i] > A[i + 1]) { sorted = 0; break; }
+    /* quick verification */
+    for (i = 0; i < n - 1; i++) {
+        if (A[i] > A[i+1]) {
+            printf("Result: not sorted\n");
+            free(A);
+            free(B);
+            return 2;
         }
-        printf("Array is %s\n", sorted ? "correctly sorted" : "not sorted");
     }
+    printf("Result: correctly sorted\n");
 
     free(A);
     free(B);
-}
-
-int main(void) {
-    test_merge();
     return 0;
 }
