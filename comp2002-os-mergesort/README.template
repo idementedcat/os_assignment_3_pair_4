@@ -1,9 +1,9 @@
 README.template
 
-## Project Number/Title 
+## Assignment 3 Concurrency
 
-* Authors: Your Name, and your group members’ names
-* Group name: Your Group Name
+* Authors: Samuel Brown (a1833328), Jiazhi Chen (a1868575)
+* Group name: Pair 4
 
 ## Overview
 
@@ -12,10 +12,20 @@ sentences, you're going too far. Generally, you should be pulling this
 right from the project specification. We don't want you to just cut and
 paste, but paraphrase what is stated in the project specification.
 
+This program utilises the pthread library to demonstrate the efficiency benefits of multi-threading.
+This accomplished by implementing a parallelised and standard merge sort algorithm,
+which can then be tested with randomly-generated arrays to test the relative performance of each approach.
+
 ## Manifest
 
 A listing of source files and other non-generated files, and a brief
 (one-line) explanation of the purpose of each file.
+• Makefile -Shell language file to assist in compiling and managing dependencies.
+• mergesort.c -Contains the various merge and sort functions, written in C.
+• mergesort.h -
+• test-mergesort.c -Provided test to determine the success of all functions.
+• test-merge.c -Test file to verify the basic merge function.
+• test-my-mergesort.c -Test file to verify the functionality of the basic, non-parallel mergesort function.
 
 ## Building the project
 
